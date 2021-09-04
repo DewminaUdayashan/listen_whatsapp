@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="dewz.wa.listen.listen_whatsapp">
+
+    <application>
+        <service
+            android:name=".WhatsappAccessibilityService"
+
+            android:exported="true"
+            android:label="app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter android:exported="true">
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>
