@@ -72,7 +72,6 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
                 DB.close();
             }
         }
-
     }
 
 
