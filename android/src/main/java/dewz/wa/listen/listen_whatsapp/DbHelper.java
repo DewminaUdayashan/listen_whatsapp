@@ -25,34 +25,54 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public void insertData(String sender, String date, String message) {
+        boolean IS_SENDER_EXIST = false;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query("senders", new String[]{"id",
                         "name"}, "name" + "=?",
                 new String[]{sender}, null, null, null, null);
-        if (cursor != null)
+        if (cursor != null) {
             if (cursor.moveToFirst()) {
                 Log.d("TAG", "insertSender: Sender exist");
+                IS_SENDER_EXIST = true;
+            } else {
+                IS_SENDER_EXIST = false;
             }
+        } else {
+            IS_SENDER_EXIST = false;
+        }
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("name", sender);
-        long result = db.insert("senders", null, contentValues);
-        Log.d("TAG", "insertData: INSERT RESULT =========> " + result);
+        if (!IS_SENDER_EXIST) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("name", sender);
+            long result = db.insert("senders", null, contentValues);
+            Log.d("TAG", "insertData: INSERT RESULT =========> " + result);
+        }
+
         if (cursor != null)
             cursor.close();
-        // return contact
+
+        Cursor cursor2 = db.query("senders", new String[]{"id",
+                        "name"}, "name" + "=?",
+                new String[]{sender}, null, null, null, null);
+        if (cursor2 != null)
+            if (cursor2.moveToFirst()) {
+                insertMessage(cursor2.getInt(0), message);
+
+            }
+
+        if (cursor2 != null)
+            cursor2.close();
+
+
     }
 
 
-    public boolean insetData(String date, String data, String message) {
+    public void insertMessage(int senderId, String message) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("date", date);
-        contentValues.put("data", data);
+        contentValues.put("sender_id", senderId);
         contentValues.put("message", message);
-        long result = db.insert("test", null, contentValues);
-        if (result == -1) return false;
-        return true;
+        long result = db.insert("messages", null, contentValues);
     }
 
 
