@@ -68,7 +68,7 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
                 if (subtext.isEmpty()) {
                     subtext = text;
                 }
-                DB.insetData(date, title, subtext);
+                DB.insertData(title, date, subtext);
                 DB.close();
             }
         }
