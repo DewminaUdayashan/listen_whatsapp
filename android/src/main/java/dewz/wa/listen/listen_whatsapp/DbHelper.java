@@ -18,11 +18,14 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table IF NOT EXISTS senders(id INTEGER primary key AUTOINCREMENT, name TEXT)");
         db.execSQL("create table IF NOT EXISTS messages(id INTEGER primary key AUTOINCREMENT, sender_id INTEGER, message TEXT)");
+        db.execSQL("create table IF NOT EXISTS groups(id INTEGER primary key AUTOINCREMENT, name TEXT)");
+        db.execSQL("create table IF NOT EXISTS group_messages(id INTEGER primary key AUTOINCREMENT, group_id INTEGER, sender Text, message TEXT)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
+
 
     public void insertData(String sender, String date, String message) {
         boolean IS_SENDER_EXIST = false;
@@ -88,10 +91,59 @@ public class DbHelper extends SQLiteOpenHelper {
         return DB.rawQuery("SELECT * FROM messages", null);
     }
 
-    public Cursor getdata() {
-        SQLiteDatabase DB = this.getWritableDatabase();
-        Cursor cursor = DB.rawQuery("Select * from test", null);
-        return cursor;
+
+    public void insertGroupData(String group, String sender, String date, String message) {
+        boolean IS_GROUP_EXIST = false;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("groups", new String[]{"id",
+                        "name"}, "name" + "=?",
+                new String[]{group}, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                Log.d("TAG", "Group Data: Group exist");
+                IS_GROUP_EXIST = true;
+            } else {
+                IS_GROUP_EXIST = false;
+            }
+        } else {
+            IS_GROUP_EXIST = false;
+        }
+
+        if (!IS_GROUP_EXIST) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("name", group);
+            long result = db.insert("groups", null, contentValues);
+            Log.d("TAG", "insertData: INSERT RESULT =========> " + result);
+        }
+
+        if (cursor != null)
+            cursor.close();
+
+        Cursor cursor2 = db.query("senders", new String[]{"id",
+                        "name"}, "name" + "=?",
+                new String[]{sender}, null, null, null, null);
+        if (cursor2 != null)
+            if (cursor2.moveToFirst()) {
+                boolean res = insertGroupMessage(cursor2.getInt(0), sender, message);
+                Log.d("TAG", "insertData:GROUP MESSAGE INSERTED ======> " + res);
+            }
+
+        if (cursor2 != null)
+            cursor2.close();
+
 
     }
+
+
+    public boolean insertGroupMessage(int groupId, String sender, String message) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("group_id", groupId);
+        contentValues.put("sender", sender);
+        contentValues.put("message", message);
+        long result = db.insert("group_messages", null, contentValues);
+        return result != -1;
+    }
+
+
 }
