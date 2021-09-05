@@ -10,10 +10,10 @@ class ListenWhatsapp {
     await _channel.invokeMethod('startService');
   }
 
-  static Future<List<Map<String, dynamic>>> getMessages() async {
+  static Future<List<Map<String, dynamic>>> getSenders() async {
     List<Map<String, dynamic>> send =
         List<Map<String, dynamic>>.empty(growable: true);
-    final list = await _channel.invokeListMethod("getMessages");
+    final list = await _channel.invokeListMethod("getSenders");
     for (var value in list!) {
       send.add(Map<String, dynamic>.from(value));
     }

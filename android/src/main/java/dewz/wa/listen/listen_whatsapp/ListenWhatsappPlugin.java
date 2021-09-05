@@ -60,8 +60,8 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
                     activity.startActivity(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS));
                 }
                 break;
-            case "getMessages":
-                result.success(getMessages());
+            case "getSenders":
+                result.success(getSenders());
                 break;
             case "checkNotificationService":
                 result.success(isNotificationServiceEnabled());
@@ -70,19 +70,17 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
     }
 
 
-    List<Map<String, Object>> getMessages() {
+    List<Map<String, Object>> getSenders() {
         List<Map<String, Object>> list = new ArrayList<>();
         DbHelper DB = new DbHelper(activity);
-        Cursor res = DB.getdata();
+        Cursor res = DB.getSenders();
         if (res.getCount() == 0) {
             return list;
         }
         while (res.moveToNext()) {
             Map<String, Object> map = new HashMap<>();
             map.put("id", res.getInt(0));
-            map.put("date", res.getString(1));
-            map.put("title", res.getString(2));
-            map.put("msg", res.getString(3));
+            map.put("sender", res.getString(1));
             list.add(map);
         }
         DB.close();

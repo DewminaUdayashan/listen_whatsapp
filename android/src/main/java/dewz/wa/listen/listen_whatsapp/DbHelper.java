@@ -76,6 +76,11 @@ public class DbHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    
+    public Cursor getSenders(){
+        SQLiteDatabase DB = this.getWritableDatabase();
+        return DB.rawQuery("SELECT * FROM senders", null);
+    }
 
     public Cursor getdata() {
         SQLiteDatabase DB = this.getWritableDatabase();

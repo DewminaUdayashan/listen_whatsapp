@@ -52,6 +52,7 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
         Log.d(TAG, "onNotificationPosted: " + extras);
         String title = extras.getString("android.title");
         String text = "" + extras.getString("android.text");
+        boolean isGroup = extras.getBoolean("android.isGroupConversation");
         String subtext = "";
         Log.d(TAG, "onNotificationPosted: TITLE =======>" + title);
         if (notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE) {
@@ -68,8 +69,15 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
                 if (subtext.isEmpty()) {
                     subtext = text;
                 }
-                DB.insertData(title, date, subtext);
-                DB.close();
+                if(!isGroup) {
+                    DB.insertData(title, date, subtext);
+                    DB.close();
+                }else{
+                    String hiddenTitle =  extras.getString("android.hiddenConversationTitle");
+                    String title1 = hiddenTitle.replaceAll("\\(.*?\\)","");
+                    String sender = title.split(":")[1];
+                    
+                }
             }
         }
     }
