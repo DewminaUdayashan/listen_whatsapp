@@ -69,6 +69,7 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
                 if (subtext.isEmpty()) {
                     subtext = text;
                 }
+                Log.d(TAG, "onNotificationPosted: IS GROUP MESSAGE =========> " + isGroup);
                 if (!isGroup) {
                     Log.d(TAG, "onNotificationPosted: THIS IS NOT A GROUP MESSAGE");
                     DB.insertData(title, date, subtext);
