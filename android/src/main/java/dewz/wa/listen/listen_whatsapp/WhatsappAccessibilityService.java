@@ -70,9 +70,11 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
                     subtext = text;
                 }
                 if (!isGroup) {
+                    Log.d(TAG, "onNotificationPosted: THIS IS NOT A GROUP MESSAGE");
                     DB.insertData(title, date, subtext);
                     DB.close();
                 } else {
+                    Log.d(TAG, "onNotificationPosted: THIS IS NOT A GROUP MESSAGE");
                     String hiddenTitle = extras.getString("android.hiddenConversationTitle");
                     String title1 = hiddenTitle.replaceAll("\\(.*?\\)", "");
                     String sender = title.split(":")[1];
