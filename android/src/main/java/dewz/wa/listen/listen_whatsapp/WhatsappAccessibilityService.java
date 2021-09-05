@@ -76,7 +76,7 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
                     String hiddenTitle = extras.getString("android.hiddenConversationTitle");
                     String title1 = hiddenTitle.replaceAll("\\(.*?\\)", "");
                     String sender = title.split(":")[1];
-                    Log.d(TAG, "onNotificationPosted: Title : " + title + " Sender : " + sender + "================================");
+                    Log.d(TAG, "onNotificationPosted: Title : " + title1 + " Sender : " + sender + "================================");
                 }
             }
         }
