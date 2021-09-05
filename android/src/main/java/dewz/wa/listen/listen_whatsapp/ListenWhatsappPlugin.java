@@ -102,7 +102,7 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
         while (res.moveToNext()) {
             Map<String, Object> map = new HashMap<>();
             map.put("id", res.getInt(0));
-            map.put("sender_id", res.getString(1));
+            map.put("sender_id", res.getInt(1));
             map.put("message", res.getString(2));
             list.add(map);
         }
