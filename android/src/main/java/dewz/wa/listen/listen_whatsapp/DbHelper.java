@@ -56,8 +56,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 new String[]{sender}, null, null, null, null);
         if (cursor2 != null)
             if (cursor2.moveToFirst()) {
-                insertMessage(cursor2.getInt(0), message);
-
+                boolean res = insertMessage(cursor2.getInt(0), message);
+                Log.d("TAG", "insertData: MESSAGE INSERTED ======> " + res);
             }
 
         if (cursor2 != null)
@@ -67,12 +67,13 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
-    public void insertMessage(int senderId, String message) {
+    public boolean insertMessage(int senderId, String message) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("sender_id", senderId);
         contentValues.put("message", message);
         long result = db.insert("messages", null, contentValues);
+        return result != -1;
     }
 
 
