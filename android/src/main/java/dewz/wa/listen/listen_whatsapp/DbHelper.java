@@ -146,4 +146,16 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
+    public Cursor getGroups() {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        return DB.rawQuery("SELECT * FROM groups", null);
+    }
+
+
+    public Cursor getGroupMessages() {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        return DB.rawQuery("SELECT * FROM group_messages", null);
+    }
+
+
 }
