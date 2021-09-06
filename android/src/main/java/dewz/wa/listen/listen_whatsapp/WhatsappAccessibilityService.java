@@ -57,6 +57,7 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
         String subtext = "";
         Log.d(TAG, "onNotificationPosted: TITLE =======>" + title);
         if (notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE) {
+            Log.d(TAG, "==================== Notification Matched for WhatsApp ==========================");
             DB = new DbHelper(getApplicationContext());
             if (!text.contains("This message was deleted") && !title.contains("WhatsApp") && !text.contains("messages from chats") && !text.contains("new messages") && !text.contains("WhatsApp Web is currently active") && !text.contains("WhatsApp Web login")) {
                 Parcelable b[] = (Parcelable[]) extras.get("android.messages");
