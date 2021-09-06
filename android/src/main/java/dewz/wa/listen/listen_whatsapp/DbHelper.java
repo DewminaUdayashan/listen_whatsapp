@@ -24,10 +24,10 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d(TAG, "onCreate: ========================== DATABASE CLASS ON CREATE CALLED ==========================");
-        db.execSQL("CREATE TABLE IF NOT EXISTS senders(id INTEGER primary key AUTOINCREMENT, name TEXT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS messages(id INTEGER primary key AUTOINCREMENT, sender_id INTEGER, message TEXT, received_date TEXT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS groups(id INTEGER primary key AUTOINCREMENT, name TEXT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS group_messages(id INTEGER primary key AUTOINCREMENT, group_id INTEGER, sender Text, message TEXT, received_date TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS senders(id INTEGER primary key AUTOINCREMENT, name TEXT, update_at TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS messages(id INTEGER primary key AUTOINCREMENT, sender_id INTEGER, message TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS groups(id INTEGER primary key AUTOINCREMENT, name TEXT, update_at TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS group_messages(id INTEGER primary key AUTOINCREMENT, group_id INTEGER, sender Text, message TEXT)");
     }
 
     @Override
@@ -79,11 +79,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     public boolean insertMessage(int senderId, String message) {
+        updateAt("senders", senderId);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("sender_id", senderId);
         contentValues.put("message", message);
-        contentValues.put("received_date", currentDate);
         long result = db.insert("messages", null, contentValues);
         return result != -1;
     }
@@ -148,12 +148,12 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     public boolean insertGroupMessage(int groupId, String sender, String message) {
+        updateAt("groups", groupId);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("group_id", groupId);
         contentValues.put("sender", sender);
         contentValues.put("message", message);
-        contentValues.put("received_date", currentDate);
         long result = db.insert("group_messages", null, contentValues);
         return result != -1;
     }
@@ -168,6 +168,16 @@ public class DbHelper extends SQLiteOpenHelper {
     public Cursor getGroupMessages() {
         SQLiteDatabase DB = this.getWritableDatabase();
         return DB.rawQuery("SELECT * FROM group_messages", null);
+    }
+
+
+    public void updateAt(String table, int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("update_At", currentDate);
+        long res = db.update(table, values, "id = ?",
+                new String[]{String.valueOf(id)});
+        Log.d(TAG, "updateAt: UPDATED AT VALUE UPDATED RESULT => " + res);
     }
 
 

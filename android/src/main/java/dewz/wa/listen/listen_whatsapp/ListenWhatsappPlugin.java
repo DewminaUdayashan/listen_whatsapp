@@ -91,6 +91,7 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
             Map<String, Object> map = new HashMap<>();
             map.put("id", res.getInt(0));
             map.put("name", res.getString(1));
+            map.put("date", res.getString(2));
             list.add(map);
         }
         DB.close();
@@ -112,7 +113,6 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
             map.put("group_id", res.getInt(1));
             map.put("sender", res.getString(2));
             map.put("message", res.getString(3));
-            map.put("date", res.getString(4));
             list.add(map);
         }
         DB.close();
@@ -131,6 +131,7 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
             Map<String, Object> map = new HashMap<>();
             map.put("id", res.getInt(0));
             map.put("sender", res.getString(1));
+            map.put("date", res.getString(2));
             list.add(map);
         }
         DB.close();
@@ -150,7 +151,6 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
             map.put("id", res.getInt(0));
             map.put("sender_id", res.getInt(1));
             map.put("message", res.getString(2));
-            map.put("date", res.getString(3));
             list.add(map);
         }
         DB.close();
