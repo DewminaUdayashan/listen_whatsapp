@@ -44,6 +44,7 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        Log.d(TAG, "====================================== NOTIFICATION POSTED ==================================");
         DateFormat df = new SimpleDateFormat("ddMMyyyyHHmmssSSS", Locale.getDefault());
         String date = df.format(Calendar.getInstance().getTime());
 
