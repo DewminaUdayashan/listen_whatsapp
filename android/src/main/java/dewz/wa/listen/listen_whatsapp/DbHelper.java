@@ -10,6 +10,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 public class DbHelper extends SQLiteOpenHelper {
+    private static final String TAG = "DB HELPER";
+
     public DbHelper(@Nullable Context context) {
         super(context, "wa_data_dewz_wss.db", null, 1);
     }
@@ -124,6 +126,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 new String[]{group}, null, null, null, null);
         if (cursor2 != null)
             if (cursor2.moveToFirst()) {
+                Log.d(TAG, "insertGroupData: Selected Group |\nId : " + cursor2.getInt(0) + "\nName : " + cursor2.getString(1) + "" +
+                        "\nSender : " + sender + "\nMessage : " + message);
+
                 boolean res = insertGroupMessage(cursor2.getInt(0), sender, message);
                 Log.d("TAG", "insertData:GROUP MESSAGE INSERTED ======> " + res);
             }
