@@ -119,9 +119,9 @@ public class DbHelper extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.close();
 
-        Cursor cursor2 = db.query("senders", new String[]{"id",
+        Cursor cursor2 = db.query("groups", new String[]{"id",
                         "name"}, "name" + "=?",
-                new String[]{sender}, null, null, null, null);
+                new String[]{group}, null, null, null, null);
         if (cursor2 != null)
             if (cursor2.moveToFirst()) {
                 boolean res = insertGroupMessage(cursor2.getInt(0), sender, message);

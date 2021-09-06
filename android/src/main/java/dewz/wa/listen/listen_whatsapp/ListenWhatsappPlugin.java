@@ -106,6 +106,7 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
             return list;
         }
         while (res.moveToNext()) {
+            Log.d("TAG", "getGroupMessages: Group Message ========> " + res.getString(3));
             Map<String, Object> map = new HashMap<>();
             map.put("id", res.getInt(0));
             map.put("group_id", res.getInt(1));
