@@ -174,7 +174,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void updateAt(String table, int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("update_At", currentDate);
+        values.put("update_at", currentDate);
         long res = db.update(table, values, "id = ?",
                 new String[]{String.valueOf(id)});
         Log.d(TAG, "updateAt: UPDATED AT VALUE UPDATED RESULT => " + res);
