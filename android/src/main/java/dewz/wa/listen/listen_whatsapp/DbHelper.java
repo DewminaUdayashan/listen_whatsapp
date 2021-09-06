@@ -23,10 +23,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table IF NOT EXISTS senders(id INTEGER primary key AUTOINCREMENT, name TEXT)");
-        db.execSQL("create table IF NOT EXISTS messages(id INTEGER primary key AUTOINCREMENT, sender_id INTEGER, message TEXT, String date)");
-        db.execSQL("create table IF NOT EXISTS groups(id INTEGER primary key AUTOINCREMENT, name TEXT)");
-        db.execSQL("create table IF NOT EXISTS group_messages(id INTEGER primary key AUTOINCREMENT, group_id INTEGER, sender Text, message TEXT, String date)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS senders(id INTEGER primary key AUTOINCREMENT, name TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS messages(id INTEGER primary key AUTOINCREMENT, sender_id INTEGER, message TEXT, String date)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS groups(id INTEGER primary key AUTOINCREMENT, name TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS group_messages(id INTEGER primary key AUTOINCREMENT, group_id INTEGER, sender Text, message TEXT, String date)");
     }
 
     @Override
