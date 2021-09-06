@@ -101,7 +101,7 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
     List<Map<String, Object>> getGroupMessages() {
         List<Map<String, Object>> list = new ArrayList<>();
         DbHelper DB = new DbHelper(activity);
-        Cursor res = DB.getMessages();
+        Cursor res = DB.getGroupMessages();
         if (res.getCount() == 0) {
             return list;
         }
