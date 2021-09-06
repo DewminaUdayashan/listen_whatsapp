@@ -15,10 +15,10 @@ import java.util.Locale;
 
 public class DbHelper extends SQLiteOpenHelper {
     private static final String TAG = "DB HELPER";
-    String currentDate = new SimpleDateFormat("dd-MM-yyyy:HH:mm:ss", Locale.getDefault()).format(new Date());
+    String currentDate = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss", Locale.getDefault()).format(new Date());
 
     public DbHelper(@Nullable Context context) {
-        super(context, "wa_data_dewz_wss.db", null, 1);
+        super(context, "wa_msg_data_dewz_wss.db", null, 1);
     }
 
     @Override
