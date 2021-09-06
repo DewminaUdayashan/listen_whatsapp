@@ -66,7 +66,6 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
                         Bundle msgBundle = (Bundle) tmp;
                         subtext = msgBundle.getString("text");
                     }
-                    Log.d("DetailsEzra1 :", subtext);
                 }
                 if (subtext.isEmpty()) {
                     subtext = text;
@@ -81,7 +80,8 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
                     String hiddenTitle = extras.getString("android.hiddenConversationTitle");
                     String title1 = hiddenTitle.replaceAll("\\(.*?\\)", "");
                     String sender = title.split(":")[1];
-                    Log.d(TAG, "onNotificationPosted: Title : " + title1 + " Sender : " + sender + "================================");
+                    Log.d(TAG, "onNotificationPosted: Title : " + title1 + " Sender : " + sender + " Message : " + subtext + " ================================");
+                    DB.insertGroupData(title1, sender, date, subtext);
                 }
             }
         }
