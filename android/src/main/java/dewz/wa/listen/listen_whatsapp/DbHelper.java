@@ -18,15 +18,15 @@ public class DbHelper extends SQLiteOpenHelper {
     String currentDate = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss", Locale.getDefault()).format(new Date());
 
     public DbHelper(@Nullable Context context) {
-        super(context, "wa_msg_data_dewz_wss.db", null, 1);
+        super(context, "wa_msg_data_wss_saved.db", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS senders(id INTEGER primary key AUTOINCREMENT, name TEXT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS messages(id INTEGER primary key AUTOINCREMENT, sender_id INTEGER, message TEXT, String date)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS messages(id INTEGER primary key AUTOINCREMENT, sender_id INTEGER, message TEXT, String received_date)");
         db.execSQL("CREATE TABLE IF NOT EXISTS groups(id INTEGER primary key AUTOINCREMENT, name TEXT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS group_messages(id INTEGER primary key AUTOINCREMENT, group_id INTEGER, sender Text, message TEXT, String date)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS group_messages(id INTEGER primary key AUTOINCREMENT, group_id INTEGER, sender Text, message TEXT, String received_date)");
     }
 
     @Override
@@ -82,7 +82,7 @@ public class DbHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("sender_id", senderId);
         contentValues.put("message", message);
-        contentValues.put("date", currentDate);
+        contentValues.put("received_date", currentDate);
         long result = db.insert("messages", null, contentValues);
         return result != -1;
     }
@@ -152,7 +152,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put("group_id", groupId);
         contentValues.put("sender", sender);
         contentValues.put("message", message);
-        contentValues.put("date", currentDate);
+        contentValues.put("received_date", currentDate);
         long result = db.insert("group_messages", null, contentValues);
         return result != -1;
     }
