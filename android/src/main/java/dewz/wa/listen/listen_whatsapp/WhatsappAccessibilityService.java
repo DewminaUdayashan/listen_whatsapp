@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.os.Parcelable;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -52,7 +53,8 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
         Bundle extras = sbn.getNotification().extras;
         Log.d(TAG, "onNotificationPosted: " + extras);
         String title = extras.getString("android.title");
-        String text = "" + extras.getString("android.text");
+//        SpannableStringBuilder str = extras.getCharSequence("android.text");
+        String text = extras.getCharSequence("android.text") + "";
         boolean isGroup = extras.getBoolean("android.isGroupConversation");
         String subtext = "";
         Log.d(TAG, "onNotificationPosted: TITLE =======>" + title);
