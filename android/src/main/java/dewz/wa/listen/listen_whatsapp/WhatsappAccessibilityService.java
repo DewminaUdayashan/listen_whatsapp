@@ -66,7 +66,7 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
                 if (b != null) {
                     for (Parcelable tmp : b) {
                         Bundle msgBundle = (Bundle) tmp;
-                        subtext = msgBundle.getString("text");
+                        subtext = msgBundle.getString("text") + "";
                     }
                 }
                 if (subtext.isEmpty()) {
