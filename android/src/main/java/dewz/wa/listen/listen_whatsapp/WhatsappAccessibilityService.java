@@ -45,48 +45,48 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        Log.d(TAG, "====================================== NOTIFICATION POSTED ==================================");
-        DateFormat df = new SimpleDateFormat("ddMMyyyyHHmmssSSS", Locale.getDefault());
-        String date = df.format(Calendar.getInstance().getTime());
+        try {
+            Log.d(TAG, "====================================== NOTIFICATION POSTED ==================================");
+            DateFormat df = new SimpleDateFormat("ddMMyyyyHHmmssSSS", Locale.getDefault());
+            String date = df.format(Calendar.getInstance().getTime());
 
-        int notificationCode = matchNotificationCode(sbn);
-        Bundle extras = sbn.getNotification().extras;
-        Log.d(TAG, "onNotificationPosted: " + extras);
-        String title = extras.getString("android.title");
+            int notificationCode = matchNotificationCode(sbn);
+            Bundle extras = sbn.getNotification().extras;
+            Log.d(TAG, "onNotificationPosted: " + extras);
+            String title = extras.getString("android.title");
 //        SpannableStringBuilder str = extras.getCharSequence("android.text");
-        String text = extras.getCharSequence("android.text") + "";
-        boolean isGroup = extras.getBoolean("android.isGroupConversation");
-        String subtext = "";
-        Log.d(TAG, "onNotificationPosted: TITLE =======>" + title);
-        if (notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE) {
-            Log.d(TAG, "==================== Notification Matched for WhatsApp ==========================");
-            DB = new DbHelper(getApplicationContext());
-            if (!text.contains("This message was deleted") && !title.contains("WhatsApp") && !text.contains("messages from chats") && !text.contains("new messages") && !text.contains("WhatsApp Web is currently active") && !text.contains("WhatsApp Web login")) {
-                Parcelable b[] = (Parcelable[]) extras.get("android.messages");
-                if (b != null) {
-                    for (Parcelable tmp : b) {
-                        Bundle msgBundle = (Bundle) tmp;
-                        subtext = msgBundle.getCharSequence("text").toString();
+            String text = extras.getCharSequence("android.text") + "";
+            boolean isGroup = extras.getBoolean("android.isGroupConversation");
+            String subtext = "";
+            Log.d(TAG, "onNotificationPosted: TITLE =======>" + title);
+            if (notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE) {
+                Log.d(TAG, "==================== Notification Matched for WhatsApp ==========================");
+                DB = new DbHelper(getApplicationContext());
+                if (!text.contains("This message was deleted") && !title.contains("WhatsApp") && !text.contains("messages from chats") && !text.contains("new messages") && !text.contains("WhatsApp Web is currently active") && !text.contains("WhatsApp Web login")) {
+                    Parcelable b[] = (Parcelable[]) extras.get("android.messages");
+                    if (b != null) {
+                        for (Parcelable tmp : b) {
+                            Bundle msgBundle = (Bundle) tmp;
+                            subtext = msgBundle.getCharSequence("text").toString();
+                        }
+                    }
+                    if (subtext.isEmpty()) {
+                        subtext = text;
+                    }
+                    if (!isGroup) {
+                        DB.insertData(title, date, subtext);
+                        DB.close();
+                    } else {
+                        String hiddenTitle = extras.getString("android.hiddenConversationTitle");
+                        String title1 = hiddenTitle.replaceAll("\\(.*?\\)", "");
+                        String sender = title.split(":")[1];
+                        Log.d(TAG, "onNotificationPosted: Title : " + title1 + " Sender : " + sender + " Message : " + subtext + " ================================");
+                        DB.insertGroupData(title1, sender, date, subtext);
                     }
                 }
-                if (subtext.isEmpty()) {
-                    subtext = text;
-                }
-                Log.d(TAG, "onNotificationPosted: PRINTING MESSAGE ========> " + text);
-                Log.d(TAG, "onNotificationPosted: IS GROUP MESSAGE =========> " + isGroup);
-                if (!isGroup) {
-                    Log.d(TAG, "onNotificationPosted: THIS IS NOT A GROUP MESSAGE");
-                    DB.insertData(title, date, subtext);
-                    DB.close();
-                } else {
-                    Log.d(TAG, "onNotificationPosted: THIS IS A GROUP MESSAGE");
-                    String hiddenTitle = extras.getString("android.hiddenConversationTitle");
-                    String title1 = hiddenTitle.replaceAll("\\(.*?\\)", "");
-                    String sender = title.split(":")[1];
-                    Log.d(TAG, "onNotificationPosted: Title : " + title1 + " Sender : " + sender + " Message : " + subtext + " ================================");
-                    DB.insertGroupData(title1, sender, date, subtext);
-                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -106,28 +106,24 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        int notificationCode = matchNotificationCode(sbn);
-
-        if (notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE) {
-
-            StatusBarNotification[] activeNotifications = this.getActiveNotifications();
-
-            if (activeNotifications != null && activeNotifications.length > 0) {
-                for (int i = 0; i < activeNotifications.length; i++) {
-                    if (notificationCode == matchNotificationCode(activeNotifications[i])) {
-                        Intent intent = new Intent("com.example.ssa_ezra.whatsappmonitoring");
-                        intent.putExtra("Notification Code", notificationCode);
-                        sendBroadcast(intent);
-                        break;
-                    }
-                }
-            }
-        }
+//        int notificationCode = matchNotificationCode(sbn);
+//        if (notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE) {
+//            StatusBarNotification[] activeNotifications = this.getActiveNotifications();
+//            if (activeNotifications != null && activeNotifications.length > 0) {
+//                for (int i = 0; i < activeNotifications.length; i++) {
+//                    if (notificationCode == matchNotificationCode(activeNotifications[i])) {
+//                        Intent intent = new Intent("com.example.ssa_ezra.whatsappmonitoring");
+//                        intent.putExtra("Notification Code", notificationCode);
+//                        sendBroadcast(intent);
+//                        break;
+//                    }
+//                }
+//            }
+//        }
     }
 
     private int matchNotificationCode(StatusBarNotification sbn) {
         String packageName = sbn.getPackageName();
-
         if (packageName.equals(ApplicationPackageNames.WHATSAPP_4B_PACK_NAME) ||
                 packageName.equals(ApplicationPackageNames.WHATSAPP_GB_PACK_NAME) ||
                 packageName.equals(ApplicationPackageNames.WHATSAPP_PACK_NAME)) {

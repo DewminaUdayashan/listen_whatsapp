@@ -23,11 +23,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d(TAG, "onCreate: ========================== DATABASE CLASS ON CREATE CALLED ==========================");
-        db.execSQL("CREATE TABLE IF NOT EXISTS senders(id INTEGER primary key AUTOINCREMENT, name TEXT, update_at TEXT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS messages(id INTEGER primary key AUTOINCREMENT, sender_id INTEGER, message TEXT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS groups(id INTEGER primary key AUTOINCREMENT, name TEXT, update_at TEXT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS group_messages(id INTEGER primary key AUTOINCREMENT, group_id INTEGER, sender Text, message TEXT)");
+        try {
+            db.execSQL("CREATE TABLE IF NOT EXISTS senders(id INTEGER primary key AUTOINCREMENT, name TEXT, update_at TEXT)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS messages(id INTEGER primary key AUTOINCREMENT, sender_id INTEGER, message TEXT)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS groups(id INTEGER primary key AUTOINCREMENT, name TEXT, update_at TEXT)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS group_messages(id INTEGER primary key AUTOINCREMENT, group_id INTEGER, sender Text, message TEXT)");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -36,148 +39,185 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     public void insertData(String sender, String date, String message) {
-        boolean IS_SENDER_EXIST = false;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("senders", new String[]{"id",
-                        "name"}, "name" + "=?",
-                new String[]{sender}, null, null, null, null);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                Log.d("TAG", "insertSender: Sender exist");
-                IS_SENDER_EXIST = true;
+        try {
+            boolean IS_SENDER_EXIST = false;
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.query("senders", new String[]{"id",
+                            "name"}, "name" + "=?",
+                    new String[]{sender}, null, null, null, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    Log.d("TAG", "insertSender: Sender exist");
+                    IS_SENDER_EXIST = true;
+                } else {
+                    IS_SENDER_EXIST = false;
+                }
             } else {
                 IS_SENDER_EXIST = false;
             }
-        } else {
-            IS_SENDER_EXIST = false;
-        }
 
-        if (!IS_SENDER_EXIST) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("name", sender);
-            long result = db.insert("senders", null, contentValues);
-            Log.d("TAG", "insertData: INSERT RESULT =========> " + result);
-        }
-
-        if (cursor != null)
-            cursor.close();
-
-        Cursor cursor2 = db.query("senders", new String[]{"id",
-                        "name"}, "name" + "=?",
-                new String[]{sender}, null, null, null, null);
-        if (cursor2 != null)
-            if (cursor2.moveToFirst()) {
-                boolean res = insertMessage(cursor2.getInt(0), message);
-                Log.d("TAG", "insertData: MESSAGE INSERTED ======> " + res);
+            if (!IS_SENDER_EXIST) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("name", sender);
+                long result = db.insert("senders", null, contentValues);
+                Log.d("TAG", "insertData: INSERT RESULT =========> " + result);
             }
 
-        if (cursor2 != null)
-            cursor2.close();
+            if (cursor != null)
+                cursor.close();
 
+            Cursor cursor2 = db.query("senders", new String[]{"id",
+                            "name"}, "name" + "=?",
+                    new String[]{sender}, null, null, null, null);
+            if (cursor2 != null)
+                if (cursor2.moveToFirst()) {
+                    boolean res = insertMessage(cursor2.getInt(0), message);
+                    Log.d("TAG", "insertData: MESSAGE INSERTED ======> " + res);
+                }
 
+            if (cursor2 != null)
+                cursor2.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
     public boolean insertMessage(int senderId, String message) {
-        updateAt("senders", senderId);
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("sender_id", senderId);
-        contentValues.put("message", message);
-        long result = db.insert("messages", null, contentValues);
-        return result != -1;
+        try {
+            updateAt("senders", senderId);
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("sender_id", senderId);
+            contentValues.put("message", message);
+            long result = db.insert("messages", null, contentValues);
+            return result != -1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
     public Cursor getSenders() {
-        SQLiteDatabase DB = this.getWritableDatabase();
-        return DB.rawQuery("SELECT * FROM senders", null);
+        try {
+            SQLiteDatabase DB = this.getWritableDatabase();
+            return DB.rawQuery("SELECT * FROM senders", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
     public Cursor getMessages() {
-        SQLiteDatabase DB = this.getWritableDatabase();
-        return DB.rawQuery("SELECT * FROM messages", null);
+        try {
+            SQLiteDatabase DB = this.getWritableDatabase();
+            return DB.rawQuery("SELECT * FROM messages", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
     public void insertGroupData(String group, String sender, String date, String message) {
-        boolean IS_GROUP_EXIST = false;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("groups", new String[]{"id",
-                        "name"}, "name" + "=?",
-                new String[]{group}, null, null, null, null);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                Log.d("TAG", "Group Data: Group exist");
-                IS_GROUP_EXIST = true;
+        try {
+            boolean IS_GROUP_EXIST = false;
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.query("groups", new String[]{"id",
+                            "name"}, "name" + "=?",
+                    new String[]{group}, null, null, null, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    Log.d("TAG", "Group Data: Group exist");
+                    IS_GROUP_EXIST = true;
+                } else {
+                    IS_GROUP_EXIST = false;
+                }
             } else {
                 IS_GROUP_EXIST = false;
             }
-        } else {
-            IS_GROUP_EXIST = false;
-        }
 
-        if (!IS_GROUP_EXIST) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("name", group);
-            long result = db.insert("groups", null, contentValues);
-            Log.d("TAG", "insertData: INSERT RESULT =========> " + result);
-        }
-
-        if (cursor != null)
-            cursor.close();
-
-        Cursor cursor2 = db.query("groups", new String[]{"id",
-                        "name"}, "name" + "=?",
-                new String[]{group}, null, null, null, null);
-        if (cursor2 != null)
-            if (cursor2.moveToFirst()) {
-                Log.d(TAG, "insertGroupData: Selected Group |\nId : " + cursor2.getInt(0) + "\nName : " + cursor2.getString(1) + "" +
-                        "\nSender : " + sender + "\nMessage : " + message);
-
-                boolean res = insertGroupMessage(cursor2.getInt(0), sender, message);
-                Log.d("TAG", "insertData:GROUP MESSAGE INSERTED ======> " + res);
+            if (!IS_GROUP_EXIST) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("name", group);
+                long result = db.insert("groups", null, contentValues);
+                Log.d("TAG", "insertData: INSERT RESULT =========> " + result);
             }
 
-        if (cursor2 != null)
-            cursor2.close();
+            if (cursor != null)
+                cursor.close();
 
+            Cursor cursor2 = db.query("groups", new String[]{"id",
+                            "name"}, "name" + "=?",
+                    new String[]{group}, null, null, null, null);
+            if (cursor2 != null)
+                if (cursor2.moveToFirst()) {
+                    Log.d(TAG, "insertGroupData: Selected Group |\nId : " + cursor2.getInt(0) + "\nName : " + cursor2.getString(1) + "" +
+                            "\nSender : " + sender + "\nMessage : " + message);
 
+                    boolean res = insertGroupMessage(cursor2.getInt(0), sender, message);
+                    Log.d("TAG", "insertData:GROUP MESSAGE INSERTED ======> " + res);
+                }
+
+            if (cursor2 != null)
+                cursor2.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
     public boolean insertGroupMessage(int groupId, String sender, String message) {
-        updateAt("groups", groupId);
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("group_id", groupId);
-        contentValues.put("sender", sender);
-        contentValues.put("message", message);
-        long result = db.insert("group_messages", null, contentValues);
-        return result != -1;
+        try {
+            updateAt("groups", groupId);
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("group_id", groupId);
+            contentValues.put("sender", sender);
+            contentValues.put("message", message);
+            long result = db.insert("group_messages", null, contentValues);
+            return result != -1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
     public Cursor getGroups() {
-        SQLiteDatabase DB = this.getWritableDatabase();
-        return DB.rawQuery("SELECT * FROM groups", null);
+        try {
+            SQLiteDatabase DB = this.getWritableDatabase();
+            return DB.rawQuery("SELECT * FROM groups", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
     public Cursor getGroupMessages() {
-        SQLiteDatabase DB = this.getWritableDatabase();
-        return DB.rawQuery("SELECT * FROM group_messages", null);
+        try {
+            SQLiteDatabase DB = this.getWritableDatabase();
+            return DB.rawQuery("SELECT * FROM group_messages", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
     public void updateAt(String table, int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("update_at", currentDate);
-        long res = db.update(table, values, "id = ?",
-                new String[]{String.valueOf(id)});
-        Log.d(TAG, "updateAt: UPDATED AT VALUE UPDATED RESULT => " + res);
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("update_at", currentDate);
+            long res = db.update(table, values, "id = ?",
+                    new String[]{String.valueOf(id)});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -83,18 +83,22 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
     List<Map<String, Object>> getGroups() {
         List<Map<String, Object>> list = new ArrayList<>();
         DbHelper DB = new DbHelper(activity);
-        Cursor res = DB.getGroups();
-        if (res.getCount() == 0) {
-            return list;
+        try {
+            Cursor res = DB.getGroups();
+            if (res.getCount() == 0) {
+                return list;
+            }
+            while (res.moveToNext()) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", res.getInt(0));
+                map.put("name", res.getString(1));
+                map.put("update_at", res.getString(2));
+                list.add(map);
+            }
+            DB.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        while (res.moveToNext()) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", res.getInt(0));
-            map.put("name", res.getString(1));
-            map.put("update_at", res.getString(2));
-            list.add(map);
-        }
-        DB.close();
         return list;
     }
 
@@ -102,20 +106,24 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
     List<Map<String, Object>> getGroupMessages() {
         List<Map<String, Object>> list = new ArrayList<>();
         DbHelper DB = new DbHelper(activity);
-        Cursor res = DB.getGroupMessages();
-        if (res.getCount() == 0) {
-            return list;
+        try {
+            Cursor res = DB.getGroupMessages();
+            if (res.getCount() == 0) {
+                return list;
+            }
+            while (res.moveToNext()) {
+                Log.d("TAG", "getGroupMessages: Group Message ========> " + res.getString(3));
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", res.getInt(0));
+                map.put("group_id", res.getInt(1));
+                map.put("sender", res.getString(2));
+                map.put("message", res.getString(3));
+                list.add(map);
+            }
+            DB.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        while (res.moveToNext()) {
-            Log.d("TAG", "getGroupMessages: Group Message ========> " + res.getString(3));
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", res.getInt(0));
-            map.put("group_id", res.getInt(1));
-            map.put("sender", res.getString(2));
-            map.put("message", res.getString(3));
-            list.add(map);
-        }
-        DB.close();
         return list;
     }
 
@@ -123,18 +131,22 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
     List<Map<String, Object>> getSenders() {
         List<Map<String, Object>> list = new ArrayList<>();
         DbHelper DB = new DbHelper(activity);
-        Cursor res = DB.getSenders();
-        if (res.getCount() == 0) {
-            return list;
+        try {
+            Cursor res = DB.getSenders();
+            if (res.getCount() == 0) {
+                return list;
+            }
+            while (res.moveToNext()) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", res.getInt(0));
+                map.put("sender", res.getString(1));
+                map.put("update_at", res.getString(2));
+                list.add(map);
+            }
+            DB.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        while (res.moveToNext()) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", res.getInt(0));
-            map.put("sender", res.getString(1));
-            map.put("update_at", res.getString(2));
-            list.add(map);
-        }
-        DB.close();
         return list;
     }
 
@@ -142,18 +154,22 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
     List<Map<String, Object>> getMessages() {
         List<Map<String, Object>> list = new ArrayList<>();
         DbHelper DB = new DbHelper(activity);
-        Cursor res = DB.getMessages();
-        if (res.getCount() == 0) {
-            return list;
+        try {
+            Cursor res = DB.getMessages();
+            if (res.getCount() == 0) {
+                return list;
+            }
+            while (res.moveToNext()) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", res.getInt(0));
+                map.put("sender_id", res.getInt(1));
+                map.put("message", res.getString(2));
+                list.add(map);
+            }
+            DB.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        while (res.moveToNext()) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", res.getInt(0));
-            map.put("sender_id", res.getInt(1));
-            map.put("message", res.getString(2));
-            list.add(map);
-        }
-        DB.close();
         return list;
     }
 
