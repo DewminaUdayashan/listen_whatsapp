@@ -29,7 +29,7 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
 
     private static final class ApplicationPackageNames {
         public static final String WHATSAPP_PACK_NAME = "com.whatsapp";
-        public static final String WHATSAPP_4B_PACK_NAME = "com.whatsapp.4b";
+        public static final String WHATSAPP_4B_PACK_NAME = "com.whatsapp.w4b";
         private static final String WHATSAPP_GB_PACK_NAME = "com.gbwhatsapp";
     }
 
@@ -59,7 +59,8 @@ public class WhatsappAccessibilityService extends NotificationListenerService {
             boolean isGroup = extras.getBoolean("android.isGroupConversation");
             String subtext = "";
             Log.d(TAG, "onNotificationPosted: TITLE =======>" + title);
-            if (notificationCode != InterceptedNotificationCode.OTHER_NOTIFICATIONS_CODE) {
+            Log.d(TAG, "onNotificationPosted: NOTIFICATION CODE ================> " + notificationCode);
+            if (notificationCode == 1) {
                 Log.d(TAG, "==================== Notification Matched for WhatsApp ==========================");
                 DB = new DbHelper(getApplicationContext());
                 if (!text.contains("This message was deleted") && !title.contains("WhatsApp") && !text.contains("messages from chats") && !text.contains("new messages") && !text.contains("WhatsApp Web is currently active") && !text.contains("WhatsApp Web login")) {

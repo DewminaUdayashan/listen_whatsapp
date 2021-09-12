@@ -49,11 +49,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 if (cursor.moveToFirst()) {
                     Log.d("TAG", "insertSender: Sender exist");
                     IS_SENDER_EXIST = true;
-                } else {
-                    IS_SENDER_EXIST = false;
                 }
-            } else {
-                IS_SENDER_EXIST = false;
             }
 
             if (!IS_SENDER_EXIST) {
