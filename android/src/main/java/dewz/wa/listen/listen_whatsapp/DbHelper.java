@@ -45,7 +45,7 @@ public class DbHelper extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.query("senders", new String[]{"id",
                             "name"}, "name" + "=?",
-                    new String[]{sender}, null, null, null, null);
+                    new String[]{sender.trim()}, null, null, null, null);
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     Log.d("TAG", "insertSender: Sender exist");
@@ -55,7 +55,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
             if (!IS_SENDER_EXIST) {
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("name", sender);
+                contentValues.put("name", sender.trim());
                 long result = db.insert("senders", null, contentValues);
                 Log.d("TAG", "insertData: INSERT RESULT =========> " + result);
             }
@@ -65,7 +65,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
             Cursor cursor2 = db.query("senders", new String[]{"id",
                             "name"}, "name" + "=?",
-                    new String[]{sender}, null, null, null, null);
+                    new String[]{sender.trim()}, null, null, null, null);
             if (cursor2 != null)
                 if (cursor2.moveToFirst()) {
                     boolean res = insertMessage(cursor2.getInt(0), message);
@@ -87,7 +87,7 @@ public class DbHelper extends SQLiteOpenHelper {
             long result = -1;
             Cursor cursor2 = rdb.query("messages", new String[]{"id",
                             "message"}, "message" + "=?",
-                    new String[]{message}, null, null, null, null);
+                    new String[]{message.trim()}, null, null, null, null);
             if (cursor2 != null)
                 if (cursor2.moveToFirst()) {
                     Log.d("TAG", "insertData: MESSAGE DUPLICATED =================>");
@@ -96,7 +96,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     SQLiteDatabase db = this.getWritableDatabase();
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("sender_id", senderId);
-                    contentValues.put("message", message);
+                    contentValues.put("message", message.trim());
                     result = db.insert("messages", null, contentValues);
                 }
             return result != -1;
