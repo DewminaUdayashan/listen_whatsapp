@@ -85,7 +85,7 @@ public class DbHelper extends SQLiteOpenHelper {
             //
             SQLiteDatabase rdb = this.getReadableDatabase();
             long result = -1;
-            Cursor cursor2 = rdb.query("message", new String[]{"id",
+            Cursor cursor2 = rdb.query("messages", new String[]{"id",
                             "message"}, "message" + "=?",
                     new String[]{message}, null, null, null, null);
             if (cursor2 != null)
