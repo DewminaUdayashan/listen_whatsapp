@@ -1,5 +1,6 @@
 package dewz.wa.listen.listen_whatsapp;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -81,12 +82,23 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public boolean insertMessage(int senderId, String message) {
         try {
-            updateAt("senders", senderId);
-            SQLiteDatabase db = this.getWritableDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("sender_id", senderId);
-            contentValues.put("message", message);
-            long result = db.insert("messages", null, contentValues);
+            //
+            SQLiteDatabase rdb = this.getReadableDatabase();
+            long result = -1;
+            Cursor cursor2 = rdb.query("message", new String[]{"id",
+                            "message"}, "message" + "=?",
+                    new String[]{message}, null, null, null, null);
+            if (cursor2 != null)
+                if (cursor2.moveToFirst()) {
+                    Log.d("TAG", "insertData: MESSAGE DUPLICATED =================>");
+                } else {
+                    updateAt("senders", senderId);
+                    SQLiteDatabase db = this.getWritableDatabase();
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("sender_id", senderId);
+                    contentValues.put("message", message);
+                    result = db.insert("messages", null, contentValues);
+                }
             return result != -1;
         } catch (Exception e) {
             e.printStackTrace();
