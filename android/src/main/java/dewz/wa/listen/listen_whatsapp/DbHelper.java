@@ -179,14 +179,24 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public boolean insertGroupMessage(int groupId, String sender, String message) {
         try {
-            updateAt("groups", groupId);
-            SQLiteDatabase db = this.getWritableDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("group_id", groupId);
-            contentValues.put("sender", sender);
-            contentValues.put("message", message);
-            long result = db.insert("group_messages", null, contentValues);
-            return result != -1;
+            SQLiteDatabase rdb = this.getReadableDatabase();
+            Cursor cursor2 = rdb.query("group_messages", new String[]{"id",
+                            "message"}, "message" + "=? AND group_id =?",
+                    new String[]{message.trim(), String.valueOf(groupId)}, null, null, null, null);
+            if (cursor2 != null)
+                if (!cursor2.moveToFirst()) {
+                    updateAt("groups", groupId);
+                    SQLiteDatabase db = this.getWritableDatabase();
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("group_id", groupId);
+                    contentValues.put("sender", sender);
+                    contentValues.put("message", message);
+                    long result = db.insert("group_messages", null, contentValues);
+                    return result != -1;
+                } else {
+                    Log.d(TAG, "insertGroupMessage: MESSAGE EXIST");
+                }
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
