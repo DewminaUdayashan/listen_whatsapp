@@ -11,6 +11,7 @@ class ListenWhatsapp {
   }
 
   static Future<void> delete(int senderId, int messageId) async {
+    print('DELETE THIS ====>  $senderId $messageId');
     await _channel.invokeListMethod("deleteContactMessage", {
       "sender_id": senderId,
       "message_id": messageId,
