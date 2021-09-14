@@ -40,12 +40,30 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     public void deleteContactMessage(String senderId, String messageId) {
-        Log.d(TAG, "deleteContactMessage: JAVA DELETE THIS FOR ME ====> " + senderId + " " + messageId);
-        SQLiteDatabase DB = this.getWritableDatabase();
-        boolean val = DB.delete("messages", "sender_id =? AND id = ?", new String[]{
-                senderId, messageId
-        }) > 0;
-        Log.d(TAG, "deleteContactMessage: DELETE MESSAGE RESULT =========> " + val);
+        try {
+            Log.d(TAG, "deleteContactMessage: JAVA DELETE THIS FOR ME ====> " + senderId + " " + messageId);
+            SQLiteDatabase DB = this.getWritableDatabase();
+            boolean val = DB.delete("messages", "sender_id =? AND id = ?", new String[]{
+                    senderId, messageId
+            }) > 0;
+            DB.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void deleteContact(String contactId) {
+        try {
+            SQLiteDatabase DB = this.getWritableDatabase();
+            boolean val = DB.delete("senders", " id = ?", new String[]{
+                    contactId
+            }) > 0;
+            Log.d(TAG, "deleteContactMessage: DELETE MESSAGE RESULT =========> " + val);
+            DB.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void insertData(String sender, String date, String message) {
