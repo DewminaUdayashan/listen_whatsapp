@@ -39,6 +39,24 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
+    public void deleteGroup(String groupId) {
+        try {
+            SQLiteDatabase DB = this.getWritableDatabase();
+            boolean val = DB.delete("groups", "id = ?", new String[]{
+                    groupId
+            }) > 0;
+            Log.d(TAG, "deleteGroup: GROUP DELETEd ========> " + val);
+            boolean val2 = DB.delete("group_messages", "group_id =?", new String[]{
+                    groupId
+            }) > 0;
+            Log.d(TAG, "deleteGroup: DELETE GROUP MESSAGES ---> " + val2);
+            DB.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void deleteGroupMessage(String groupId, String messageId) {
         try {
             SQLiteDatabase DB = this.getWritableDatabase();

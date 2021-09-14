@@ -85,11 +85,19 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
                 Map<String, Object> map1 = call.arguments();
                 DbHelper DB1 = new DbHelper(activity);
                 DB1.deleteContact(map1.get("contact_id").toString());
+                DB1.close();
                 break;
             case "deleteGroupMessage":
                 Map<String, Object> map2 = call.arguments();
                 DbHelper DB2 = new DbHelper(activity);
                 DB2.deleteGroupMessage(map2.get("group_id").toString(), map2.get("message_id").toString());
+                DB2.close();
+                break;
+            case "deleteGroup":
+                Map<String, Object> map3 = call.arguments();
+                DbHelper DB3 = new DbHelper(activity);
+                DB3.deleteGroup(map3.get("group_id").toString());
+                DB3.close();
                 break;
         }
     }

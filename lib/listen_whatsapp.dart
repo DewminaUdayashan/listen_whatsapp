@@ -10,8 +10,14 @@ class ListenWhatsapp {
     await _channel.invokeMethod('startService');
   }
 
+  static Future<void> deleteGroup(int groupId) async {
+    await _channel.invokeMethod("deleteGroup", {
+      "group_id": groupId,
+    });
+  }
+
   static Future<void> deleteGroupMessage(int groupId, int messageId) async {
-    await _channel.invokeListMethod("deleteGroupMessage", {
+    await _channel.invokeMethod("deleteGroupMessage", {
       "group_id": groupId,
       "message_id": messageId,
     });
