@@ -59,7 +59,11 @@ public class DbHelper extends SQLiteOpenHelper {
             boolean val = DB.delete("senders", " id = ?", new String[]{
                     contactId
             }) > 0;
-            Log.d(TAG, "deleteContactMessage: DELETE MESSAGE RESULT =========> " + val);
+            Log.d(TAG, "deleteContactMessage: DELETE SENDEr RESULT =========> " + val);
+            boolean val2 = DB.delete("messages", "sender_id =?", new String[]{
+                    contactId,
+            }) > 0;
+            Log.d(TAG, "deleteContact: SENDERM MSGS DELETED ===> " + val2);
             DB.close();
         } catch (Exception e) {
             e.printStackTrace();
