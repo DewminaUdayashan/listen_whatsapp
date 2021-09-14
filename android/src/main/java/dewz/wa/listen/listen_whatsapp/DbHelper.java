@@ -41,9 +41,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void deleteContactMessage(String senderId, String messageId) {
         SQLiteDatabase DB = this.getWritableDatabase();
-        DB.delete("messages", "sender_id =? AND id = ?", new String[]{
+        boolean val = DB.delete("messages", "sender_id =? AND id = ?", new String[]{
                 senderId, messageId
-        });
+        }) > 0;
+        Log.d(TAG, "deleteContactMessage: DELETE MESSGE =========> " + val);
     }
 
     public void insertData(String sender, String date, String message) {
