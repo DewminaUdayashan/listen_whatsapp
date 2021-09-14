@@ -40,6 +40,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     public void deleteGroup(String groupId) {
+        Log.d(TAG, "deleteGroup: DELETING GROUP ====> " + groupId);
         try {
             SQLiteDatabase DB = this.getWritableDatabase();
             boolean val = DB.delete("groups", "id = ?", new String[]{
