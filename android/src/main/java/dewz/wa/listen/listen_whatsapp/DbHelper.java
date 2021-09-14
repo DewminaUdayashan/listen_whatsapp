@@ -39,6 +39,13 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
+    public void deleteContactMessage(String senderId, String messageId) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        DB.delete("messages", "sender_id =? AND id = ?", new String[]{
+                senderId, messageId
+        });
+    }
+
     public void insertData(String sender, String date, String message) {
         try {
             boolean IS_SENDER_EXIST = false;

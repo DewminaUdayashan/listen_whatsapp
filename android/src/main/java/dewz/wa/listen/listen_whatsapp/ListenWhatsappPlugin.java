@@ -76,6 +76,14 @@ public class ListenWhatsappPlugin implements FlutterPlugin, MethodCallHandler, A
             case "getGroupMessages":
                 result.success(getGroupMessages());
                 break;
+            case "deleteContactMessage":
+                Map<String, Object> map = call.arguments();
+                DbHelper DB = new DbHelper(activity);
+                try {
+                    DB.deleteContactMessage(map.get("sender_id").toString(), map.get("message_id").toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
         }
     }
 

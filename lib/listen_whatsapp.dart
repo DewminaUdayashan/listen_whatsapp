@@ -10,6 +10,13 @@ class ListenWhatsapp {
     await _channel.invokeMethod('startService');
   }
 
+  static void delete(int senderId, int messageId) {
+    _channel.invokeListMethod("deleteContactMessage", {
+      "sender_id": senderId,
+      "message_id": messageId,
+    });
+  }
+
   static Future<List<Map<String, dynamic>>> getSenders() async {
     List<Map<String, dynamic>> send =
         List<Map<String, dynamic>>.empty(growable: true);
